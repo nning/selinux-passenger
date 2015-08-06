@@ -1,0 +1,22 @@
+module passenger 1.0;
+
+require {
+	type anon_inodefs_t;
+	type lib_t;
+	type httpd_t;
+	type postgresql_port_t;
+	class tcp_socket name_connect;
+	class capability sys_resource;
+	class file { write execute_no_trans };
+}
+
+#============= httpd_t ==============
+allow httpd_t anon_inodefs_t:file write;
+
+allow httpd_t lib_t:file execute_no_trans;
+
+#!!!! This avc can be allowed using one of the these booleans:
+#     httpd_run_stickshift, httpd_setrlimit
+allow httpd_t self:capability sys_resource;
+
+allow httpd_t postgresql_port_t:tcp_socket name_connect;
